@@ -1,0 +1,23 @@
+- name: dataplane statistics
+  hosts: localhost
+  
+  vars:
+    docs:  
+      ovs_tx_failure_drops : tx_packetdrop.md
+      ovs_tx_mtu_exceeded_drops : tx_packetdrop.md
+      ovs_rx_qos_drops : tx_packetdrop.md
+      ovs_tx_qos_drops : tx_packetdrop.md
+      ovs_tx_retries : tx_reties.md
+            
+  tasks:
+     
+    - name: collect data from OVSDB
+      include: datacollection.yml      
+
+
+    - name: print if there are drops
+      debug:
+        msg: The counter {{item.key}} is increasing. Refer to {{item.value}}
+      when: initial.output["{{item.key}}"] > final.output["{{item.key}}"]
+      loop: "{{ lookup('dict', docs) }}"
+

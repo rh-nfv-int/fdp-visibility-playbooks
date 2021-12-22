@@ -1,0 +1,23 @@
+
+#- openvswitch.openvswitch.openvswitch_db:
+- openvswitch_db:
+    state: read
+    table: interface
+    record: '{{ interface }}'
+    col: statistics
+  register: initial
+
+- name: Sleep for 15 seconds and continue with play
+  wait_for:
+    timeout: 2
+  delegate_to: localhost
+
+#- openvswitch.openvswitch.openvswitch_db:
+- openvswitch_db:
+    state: read
+    table: interface
+    record: '{{ interface }}'
+    col: statistics
+  register: final
+
+
